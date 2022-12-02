@@ -13,3 +13,4 @@ add_subdirectory("${PROJECT_SOURCE_DIR}/lib/gtest" ./gtest)
 enable_testing()
 
 add_subdirectory("${PROJECT_SOURCE_DIR}/Day01/")
+add_subdirectory("${PROJECT_SOURCE_DIR}/Day02/")
