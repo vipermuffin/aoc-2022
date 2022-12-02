@@ -1,5 +1,5 @@
-# adventofcode-xxxx
-Solutions to xxxx [Advent of Code] [1]
+# adventofcode-2022
+Solutions to 2022 [Advent of Code] [1]
 
 ## Project Setup
 This project creates a folder for each day problem for Advent of Code solutions.  Basic structure is:

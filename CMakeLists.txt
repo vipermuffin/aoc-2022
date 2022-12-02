@@ -11,4 +11,5 @@ project (${PROJECT_NAME})
 # Add days
 add_subdirectory("${PROJECT_SOURCE_DIR}/lib/gtest" ./gtest)
 enable_testing()
-add_subdirectory("${PROJECT_SOURCE_DIR}/Day*/")
+
+add_subdirectory("${PROJECT_SOURCE_DIR}/Day01/")
