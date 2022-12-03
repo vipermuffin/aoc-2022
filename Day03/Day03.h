@@ -12,7 +12,7 @@
 
 namespace AocDay03 {
 //Function Definitions
-    char findCommonLetter(const std::string&);
+    char findCommonLetter(const std::vector<std::string>&);
+    std::vector<std::string> splitStrInHalf(const std::string&);
     uint32_t calcPriority(const std::vector<char>&);
-    char findCommonBadge(const std::string&, const std::string&, const std::string&);
 }

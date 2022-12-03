@@ -25,7 +25,8 @@ namespace AocDay03 {
         vector<char> x{};
         x.reserve(input.size());
         for(const auto& line : input) {
-            x.push_back(findCommonLetter(line));
+            auto strs = splitStrInHalf(line);
+            x.push_back(findCommonLetter(strs));
         }
 		return to_string(calcPriority(x));
     }
@@ -36,19 +37,33 @@ namespace AocDay03 {
         x.reserve(input.size());
         auto itr = input.begin();
         while(itr < input.end()) {
-            x.push_back(findCommonBadge(*itr, *(itr+1), *(itr+2)));
+            vector<string> strs{string(*itr),string(*(itr+1)),string(*(itr+2))};
+            x.push_back(findCommonLetter(strs));
             std::advance(itr, 3);
         };
         return to_string(calcPriority(x));
     }
-
-    char findCommonLetter(const std::string& line) {
-        string h1{line.begin(),line.begin()+line.size()/2};
-        string h2{line.begin()+line.size()/2,line.end()};
-        
-        for(const char c : h1) {
-            if(h2.find(c) != std::string::npos) {
-                return c;
+    
+    std::vector<string> splitStrInHalf(const std::string& s) {
+        vector<string> y{
+            string(s.begin(),s.begin()+s.size()/2),
+            string(s.begin()+s.size()/2,s.end())
+        };
+        return y;
+    }
+    
+    char findCommonLetter(const std::vector<std::string>&s) {
+        unordered_map<char, uint_fast32_t> charMap{};
+        uint_fast32_t bitmask = 0;
+        for(uint_fast32_t i = 0; i < s.size(); i++) {
+            bitmask |= (1u << i);
+            for(const char c : s[i]) {
+                charMap[c] |= (1u << i);
+            }
+        }
+        for(const auto kvp : charMap) {
+            if(kvp.second == bitmask) {
+                return kvp.first;
             }
         }
         return '-';
@@ -64,21 +79,5 @@ namespace AocDay03 {
             }
         }
         return sum;
-    }
-    
-    char findCommonBadge(const std::string& s1, const std::string& s2, const std::string& s3) {
-        unordered_map<char, uint_fast8_t> charMap{};
-        const vector<string> s{s1,s2,s3};
-        for(uint_fast8_t i = 0; i < 3; i++) {
-            for(const char c : s[i]) {
-                charMap[c] |= (1u << i);
-            }
-        }
-        for(const auto kvp : charMap) {
-            if(kvp.second == 7) {
-                return kvp.first;
-            }
-        }
-        return '-';
     }
 }

@@ -30,18 +30,23 @@ TEST(Y2022_SolveDay3, FinalSolutionPartB) {
 
 TEST(Y2022_Day3Example,Test1) {
     string x{"vJrwpWtwJgWrhcsFMMfFFhFp"};
-    
-    EXPECT_EQ('p',findCommonLetter(x));
+    auto y = splitStrInHalf(x);
+    EXPECT_EQ('p',findCommonLetter(y));
     x = "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL";
-    EXPECT_EQ('L',findCommonLetter(x));
+    y = splitStrInHalf(x);
+    EXPECT_EQ('L',findCommonLetter(y));
     x = "PmmdzqPrVvPwwTWBwg";
-    EXPECT_EQ('P',findCommonLetter(x));
+    y = splitStrInHalf(x);
+    EXPECT_EQ('P',findCommonLetter(y));
     x = "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn";
-    EXPECT_EQ('v',findCommonLetter(x));
+    y = splitStrInHalf(x);
+    EXPECT_EQ('v',findCommonLetter(y));
     x = "ttgJtRGJQctTZtZT";
-    EXPECT_EQ('t',findCommonLetter(x));
+    y = splitStrInHalf(x);
+    EXPECT_EQ('t',findCommonLetter(y));
     x = "CrZsJsPPZsGzwwsLwLmpwMDw";
-    EXPECT_EQ('s',findCommonLetter(x));
+    y = splitStrInHalf(x);
+    EXPECT_EQ('s',findCommonLetter(y));
 }
 
 TEST(Y2022_Day3Example,Test2) {
@@ -55,9 +60,11 @@ TEST(Y2022_Day3Example,Test3) {
     string x{"vJrwpWtwJgWrhcsFMMfFFhFp"};
     string y{"jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL"};
     string z{"PmmdzqPrVvPwwTWBwg"};
-    EXPECT_EQ('r',findCommonBadge(x, y, z));
+    vector<string> group{x,y,z};
+    EXPECT_EQ('r',findCommonLetter(group));
     string x1{"wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn"};
     string y1{"ttgJtRGJQctTZtZT"};
     string z1{"CrZsJsPPZsGzwwsLwLmpwMDw"};
-    EXPECT_EQ('Z',findCommonBadge(x1, y1, z1));
+    vector<string> group2{x1,y1,z1};
+    EXPECT_EQ('Z',findCommonLetter(group2));
 }
