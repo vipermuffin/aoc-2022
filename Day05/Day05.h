@@ -12,5 +12,7 @@
 
 namespace AocDay05 {
 //Function Definitions
+    std::vector<std::vector<char>> parseStacksFromInput(const std::vector<std::string>&);
+    std::string getfinalOuput(const std::vector<std::string>&, bool canMoveFullStack = false);
 
 }

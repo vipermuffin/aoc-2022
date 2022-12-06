@@ -21,52 +21,53 @@ namespace AocDay05 {
     static const std::string InputFileName = "Day05.txt";
     std::string solvea() {
         auto input = parseFileForLines(InputFileName);
-        vector<vector<char>> stacks {
-            {'F','C','J','P','H','T','W'},
-            {'G','R','V','F','Z','J','B','H'},
-            {'H','P','T','R'},
-            {'Z','S','N','P','H','T'},
-            {'N','V','F','Z','H','J','C','D'},
-            {'P','M','G','F','W','D','Z'},
-            {'M','V','Z','W','S','J','D','P'},
-            {'N','D','S'},
-            {'D','Z','S','F','M'}
-        };
-        auto itr = input.begin()+10;
-        while(itr != input.end()) {
-            int32_t num2Move,fromCol,toCol;
-            sscanf(itr->c_str(),"move %d from %d to %d", &num2Move, &fromCol, &toCol);
-            fromCol--;
-            toCol--;
-            for(int32_t i = 0; i < num2Move;i++) {
-                if(stacks[fromCol].size() > 0) {
-                    stacks[toCol].push_back(stacks[fromCol].back());
-                    stacks[fromCol].pop_back();
-                }
-            }
-            itr++;
-        }
-        string output{"---------"};
-        for(int32_t i = 0; i < stacks.size(); i++) {
-            output[i] = stacks[i].back();
-        }
-		return output;
+		return getfinalOuput(input);
     }
 
     std::string solveb() {
         auto input = parseFileForLines(InputFileName);
-        vector<vector<char>> stacks {
-            {'F','C','J','P','H','T','W'},
-            {'G','R','V','F','Z','J','B','H'},
-            {'H','P','T','R'},
-            {'Z','S','N','P','H','T'},
-            {'N','V','F','Z','H','J','C','D'},
-            {'P','M','G','F','W','D','Z'},
-            {'M','V','Z','W','S','J','D','P'},
-            {'N','D','S'},
-            {'D','Z','S','F','M'}
-        };
-        auto itr = input.begin()+10;
+        return getfinalOuput(input, true);
+    }
+    
+    std::vector<std::vector<char>> parseStacksFromInput(const std::vector<std::string>& input) {
+        vector<vector<char>> stacks{};
+        //Assuming all lines are same length and space delimited
+        auto itr = input.begin();
+        while(itr != input.end() && !itr->empty()) {
+            std::advance(itr, 1);
+        }
+        
+        std::vector<std::string> stackInput{input.begin(),itr};
+        auto rItr = stackInput.rbegin();
+        std::vector<uint_fast8_t> idxs{};
+        //Count how many columns...only works for 0=<col<10
+        for(int_fast8_t i = 0; i < rItr->size(); i++) {
+            vector<char> tmp{};
+            if(rItr->at(i) != ' ') {
+                idxs.push_back(i);
+                stacks.push_back(tmp);
+            }
+        }
+        std::advance(rItr, 1);
+        while(rItr != stackInput.rend()) {
+            for(int_fast8_t i = 0; i < idxs.size(); i++) {
+                if(idxs[i] < rItr->size() && rItr->at(idxs[i]) != ' ') {
+                    stacks[i].push_back(rItr->at(idxs[i]));
+                }
+            }
+            std::advance(rItr, 1);
+        }
+        return stacks;
+    }
+    
+    std::string getfinalOuput(const std::vector<std::string>& input, bool canMoveFullStack) {
+        auto stacks = parseStacksFromInput(input);
+        auto itr = input.begin();
+        while(!itr->empty()){
+            std::advance(itr, 1);
+        }
+        
+        std::advance(itr, 1);
         while(itr != input.end()) {
             int32_t num2Move,fromCol,toCol;
             sscanf(itr->c_str(),"move %d from %d to %d", &num2Move, &fromCol, &toCol);
@@ -80,18 +81,24 @@ namespace AocDay05 {
                     stacks[fromCol].pop_back();
                 }
             }
-            auto rItr = temp.rbegin();
-            while(rItr != temp.rend()) {
-                stacks[toCol].push_back(*rItr);
-                rItr++;
-            }
             
-            itr++;
+            //If full stack can be move, need to reverse reverse
+            if(canMoveFullStack) {
+                std::reverse(temp.begin(), temp.end());
+            }
+            auto sItr = temp.begin();
+            while(sItr != temp.end()) {
+                stacks[toCol].push_back(*sItr);
+                sItr++;
+            }
+            std::advance(itr, 1);;
         }
-        string output{"---------"};
-        for(int32_t i = 0; i < stacks.size(); i++) {
+        
+        string output("-",stacks.size());
+        for(int_fast8_t i = 0; i < stacks.size(); i++) {
             output[i] = stacks[i].back();
         }
+        
         return output;
     }
 
