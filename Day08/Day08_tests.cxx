@@ -49,8 +49,3 @@ TEST(Y2022_Day8Example,Test2) {
     };
     EXPECT_EQ(8,findHighestScenicVal(input));
 }
-
-TEST(Y2022_Day8Example,Test3) {
-    int x = 0;
-    EXPECT_EQ(0,x);
-}
