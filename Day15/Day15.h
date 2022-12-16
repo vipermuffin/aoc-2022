@@ -15,10 +15,10 @@ namespace AocDay15 {
 //Function Definitions
     constexpr size_t xIdx = 0;
     constexpr size_t yIdx = 1;
-    using Coord = union {
+    typedef union {
         uint64_t all;
         int32_t  xy[2];
-    };
+    } Coord;
     constexpr int32_t X(const Coord& position) {
         return position.xy[xIdx];
     }
