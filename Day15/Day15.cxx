@@ -52,8 +52,9 @@ namespace AocDay15 {
 
     std::string solveb() {
         auto input = parseFileForLines(InputFileName);
+        auto s2b = getBeaconMap(input);
 
-		return "---";
+		return to_string(findDistressedBeacon(s2b, 4000000));
     }
 
     std::unordered_map<uint64_t, uint64_t> getBeaconMap(const std::vector<std::string>& beaconInput) {
@@ -71,24 +72,12 @@ namespace AocDay15 {
         return sensorToBeacon;
     }
     
-    int32_t countImpossibleSpotsForRow(const std::unordered_map<uint64_t, uint64_t>&sensorToBeacon,int32_t row){
+    int32_t countImpossibleSpotsForRow(const std::unordered_map<uint64_t, uint64_t>&sensorToBeacon,int32_t row, Coord* distressed, int32_t rMax){
         unordered_set<uint64_t> illegalSpots{};
         unordered_set<uint64_t> takenSpots{};
-        int32_t illegalCount{0};
-        //Get all locations
-        for(const auto& s2b : sensorToBeacon) {
-            Coord tmp;
-            tmp.all = s2b.first;
-//            if(Y(tmp) == row) {
-                takenSpots.insert(tmp.all);
-//            }
-            tmp.all = s2b.second;
-//            if(Y(tmp) == row) {
-                takenSpots.insert(tmp.all);
-//            }
-        }
         
-        
+        vector<std::pair<int32_t,int32_t>> ranges{};
+        ranges.reserve(sensorToBeacon.size());
         for(const auto& s2b : sensorToBeacon) {
             Coord sensor,beacon;
             sensor.all = s2b.first;
@@ -97,96 +86,77 @@ namespace AocDay15 {
             auto xOffset = abs(X(sensor)-X(beacon));
             auto yOffset = abs(Y(sensor)-Y(beacon));
             offset = xOffset+yOffset;
-//            cout << "Beacon at {" << X(beacon) << "," << Y(beacon) << "}..." << endl;
-//            cout << "Searching {" << X(sensor) << "," << Y(sensor) << "}...";
             if(row >= Y(sensor)-offset && row <= Y(sensor)+offset) {
                 xOffset = offset-abs(row-Y(sensor));
-                for(int32_t j = -xOffset; j <= xOffset; j++) {
-                    Coord tmp{sensor.all};
-                    setX(tmp, X(sensor)+j);
-                    setY(tmp, row);
-                    if(takenSpots.count(tmp.all) == 0) {
-                        //No beacon there so must be impossible
-                        //cout << "{" << X(tmp) << "," << Y(tmp) << "}" << endl;
-                        if(illegalSpots.count(tmp.all)==0) {
-                            illegalSpots.insert(tmp.all);
-                            illegalCount++;
-//                            cout << "{" << X(tmp) << "," << Y(tmp) << "}" << endl;
-                        }
+                int32_t xMin =X(sensor)-xOffset;
+                int32_t xMax = X(sensor)+xOffset;
+                if(distressed != nullptr) {
+                    if(xMin < 0) {
+                        xMin = 0;
+                    }
+                    if(xMax > rMax) {
+                        xMax = rMax;
                     }
                 }
+                ranges.emplace_back(xMin,xMax);
+            }
+        }
+        
+        
+        bool done = false;
+        while(!done) {
+            vector<std::pair<int32_t, int32_t>> newRanges{};
+            newRanges.reserve(ranges.size());
+            done = true;
+            auto itr = ranges.begin();
+            auto currentRange = *itr++;
+            while(itr != ranges.end()) {
+                //Check for overlap
+                if( (itr->first <= currentRange.first && currentRange.first <= itr->second) ||
+                    (itr->second<= currentRange.second && currentRange.second <= itr->first)||
+                    (currentRange.first <= itr->first && itr->first <= currentRange.second) ||
+                    (currentRange.second <= itr->second && itr->second <= currentRange.first)) {
+                    done = false;
+                    //Overlap detected
+//                    cout << "Overlap: {" << currentRange.first << "," << currentRange.second << "} {" << itr->first << "," << itr->second << "} --> {";
+                    currentRange.first = min(currentRange.first,itr->first);
+                    currentRange.second = max(currentRange.second,itr->second);
+//                    cout << currentRange.first << "," << currentRange.second << "}" << endl;
+                } else {
+//                    cout << "NO Overlap: {" << currentRange.first << "," << currentRange.second << "} {" << itr->first << "," << itr->second << "}" << endl;
+                    newRanges.push_back(*itr);
+                }
+                std::advance(itr, 1);
+            }
+            if(newRanges.empty()) {
+                newRanges.push_back(currentRange);
+            } else if(newRanges.back().first != currentRange.first && newRanges.back().second != currentRange.second) {
+                newRanges.push_back(currentRange);
+            }
+            
+            std::swap(ranges,newRanges);
+        }
+        int32_t illegalCount{0};
+        for(const auto& p : ranges) {
+            illegalCount += p.second - p.first;
+        }
+        if(distressed != nullptr && illegalCount == (rMax-2)) {
+            setY(*distressed,row);
+            //assuming not at 0
+            if(ranges.front().first == 0) {
+                setX(*distressed,ranges.front().second+1);
+            } else {
+                setX(*distressed,ranges.back().second+1);
             }
         }
         return illegalCount;
     }
     
     uint64_t findDistressedBeacon(const std::unordered_map<uint64_t, uint64_t>&sensorToBeacon, const int32_t max) {
-        unordered_set<uint64_t> takenSpots{};
-        int32_t illegalCountRow{0};
         Coord distressedBeacon{0};
-        
-        vector<int32_t> invalidCounts{};
-        invalidCounts.resize(max,max);
-        
-        //Get all locations
-        for(const auto& s2b : sensorToBeacon) {
-            Coord tmp{0};
-            tmp.all = s2b.first;
-            if(Y(tmp) >= 0 && Y(tmp) <= max) {
-                takenSpots.insert(tmp.all);
-                invalidCounts[Y(tmp)]--;
-            }
-            tmp.all = s2b.second;
-            if(Y(tmp) >= 0 && Y(tmp) <= max) {
-                takenSpots.insert(tmp.all);
-                invalidCounts[Y(tmp)]--;
-            }
-        }
-
-        for(const auto& s2b : sensorToBeacon) {
-            Coord sensor,beacon;
-            sensor.all = s2b.first;
-            beacon.all = s2b.second;
-            for(int32_t row = 0; row <= max; row++) {
-                int32_t offset{0};
-                auto xOffset = abs(X(sensor)-X(beacon));
-                auto yOffset = abs(Y(sensor)-Y(beacon));
-                offset = xOffset+yOffset;
-                //            cout << "Beacon at {" << X(beacon) << "," << Y(beacon) << "}..." << endl;
-                //            cout << "Searching {" << X(sensor) << "," << Y(sensor) << "}...";
-                if(row >= Y(sensor)-offset && row <= Y(sensor)+offset) {
-                    xOffset = offset-abs(row-Y(sensor));
-                    for(int32_t j = -xOffset; j <= xOffset; j++) {
-                        Coord tmp{sensor.all};
-                        setX(tmp, X(sensor)+j);
-                        setY(tmp, row);
-                        if(X(tmp) >= 0 && X(tmp) <= max) {
-                            if(takenSpots.count(tmp.all) == 0) {
-                                //No beacon there so must be taken
-                                takenSpots.insert(tmp.all);
-                                invalidCounts[row]--;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        for(int32_t i = 0; i <= max; i++) {
-            if(invalidCounts[i] == 1) {
-                illegalCountRow = i;
-            }
-        }
-        bool done = false;
-        Coord tmp{0};
-        setY(tmp,illegalCountRow);
-        for(int32_t i = 0; i < max && !done; i++) {
-            setX(tmp, i);
-            if(takenSpots.count(tmp.all) == 0) {
-                distressedBeacon.all = tmp.all;
-                done = true;
-                cout << "{" << X(tmp) << "," << Y(tmp) << "}" << endl;
-            }
+        for(int32_t i = 0; i < max; i++) {
+            auto val = countImpossibleSpotsForRow(sensorToBeacon, i, &distressedBeacon, max);
+//            cout << val << endl;
         }
         return static_cast<uint64_t>(X(distressedBeacon))*static_cast<uint64_t>(4000000)+static_cast<uint64_t>(Y(distressedBeacon));
     }

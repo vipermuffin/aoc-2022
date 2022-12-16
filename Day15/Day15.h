@@ -28,6 +28,6 @@ namespace AocDay15 {
     }
 
     std::unordered_map<uint64_t, uint64_t> getBeaconMap(const std::vector<std::string>&);
-    int32_t countImpossibleSpotsForRow(const std::unordered_map<uint64_t, uint64_t>&,int32_t row);
+    int32_t countImpossibleSpotsForRow(const std::unordered_map<uint64_t, uint64_t>&,int32_t row, Coord* distressed = nullptr, int32_t rMax = INT32_MAX);
     uint64_t findDistressedBeacon(const std::unordered_map<uint64_t, uint64_t>&,const int32_t max);
 }
