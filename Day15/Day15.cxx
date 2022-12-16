@@ -11,23 +11,7 @@
 #include "AoCUtils.h"
 //Common Libraries
 #include <algorithm> //std::sort, find, for_each, max_element, etc
-//#include <array>
 #include <climits>   //INT_MIN, INT_MAX, etc.
-//#include <chrono>
-//#include <iostream>
-//#include <fstream> //ifstream
-//#include <functional> //std::function
-//#include <iomanip> //setfill setw hex
-//#include <map>
-//#include <math.h> //sqrt
-//#include <numeric> //std::accumulate
-//#include <queue>
-//#include <regex>
-//#include <set>
-//#include <sstream>
-//#include <thread>
-//#include <tuple>
-//#include <unordered_map>
 #include <unordered_set>
 
 
@@ -73,8 +57,6 @@ namespace AocDay15 {
     }
     
     int32_t countImpossibleSpotsForRow(const std::unordered_map<uint64_t, uint64_t>&sensorToBeacon,int32_t row, Coord* distressed, int32_t rMax){
-        unordered_set<uint64_t> illegalSpots{};
-        unordered_set<uint64_t> takenSpots{};
         
         vector<std::pair<int32_t,int32_t>> ranges{};
         ranges.reserve(sensorToBeacon.size());
@@ -118,21 +100,14 @@ namespace AocDay15 {
                     (currentRange.second <= itr->second && itr->second <= currentRange.first)) {
                     done = false;
                     //Overlap detected
-//                    cout << "Overlap: {" << currentRange.first << "," << currentRange.second << "} {" << itr->first << "," << itr->second << "} --> {";
                     currentRange.first = min(currentRange.first,itr->first);
                     currentRange.second = max(currentRange.second,itr->second);
-//                    cout << currentRange.first << "," << currentRange.second << "}" << endl;
                 } else {
-//                    cout << "NO Overlap: {" << currentRange.first << "," << currentRange.second << "} {" << itr->first << "," << itr->second << "}" << endl;
                     newRanges.push_back(*itr);
                 }
                 std::advance(itr, 1);
             }
-            if(newRanges.empty()) {
-                newRanges.push_back(currentRange);
-            } else if(newRanges.back().first != currentRange.first && newRanges.back().second != currentRange.second) {
-                newRanges.push_back(currentRange);
-            }
+            newRanges.push_back(currentRange);
             
             std::swap(ranges,newRanges);
         }
@@ -156,7 +131,6 @@ namespace AocDay15 {
         Coord distressedBeacon{0};
         for(int32_t i = 0; i < max; i++) {
             auto val = countImpossibleSpotsForRow(sensorToBeacon, i, &distressedBeacon, max);
-//            cout << val << endl;
         }
         return static_cast<uint64_t>(X(distressedBeacon))*static_cast<uint64_t>(4000000)+static_cast<uint64_t>(Y(distressedBeacon));
     }
