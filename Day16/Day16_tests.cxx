@@ -29,13 +29,34 @@ TEST(Y2022_SolveDay16, FinalSolutionPartB) {
 }
 
 TEST(Y2022_Day16Example,Test1) {
-    int x = 0;
-    EXPECT_EQ(0,x);
+    string x = "Valve AA has flow rate=7; tunnels lead to valves DD, II, BB";
+    TunnelMap tm{};
+    parseLineForValve(x, tm);
+    ASSERT_EQ(1, tm.size());
+    ASSERT_EQ(1, tm.count("AA"));
+    EXPECT_EQ(7, tm.at("AA").first);
+    ASSERT_EQ(3, tm.at("AA").second.size());
+    EXPECT_EQ("DD", tm.at("AA").second[0]);
+    EXPECT_EQ("II", tm.at("AA").second[1]);
+    EXPECT_EQ("BB", tm.at("AA").second[2]);
 }
 
 TEST(Y2022_Day16Example,Test2) {
-    int x = 0;
-    EXPECT_EQ(0,x);
+    vector<string> input {
+        "Valve AA has flow rate=0; tunnels lead to valves DD, II, BB",
+        "Valve BB has flow rate=13; tunnels lead to valves CC, AA",
+        "Valve CC has flow rate=2; tunnels lead to valves DD, BB",
+        "Valve DD has flow rate=20; tunnels lead to valves CC, AA, EE",
+        "Valve EE has flow rate=3; tunnels lead to valves FF, DD",
+        "Valve FF has flow rate=0; tunnels lead to valves EE, GG",
+        "Valve GG has flow rate=0; tunnels lead to valves FF, HH",
+        "Valve HH has flow rate=22; tunnel leads to valve GG",
+        "Valve II has flow rate=0; tunnels lead to valves AA, JJ",
+        "Valve JJ has flow rate=21; tunnel leads to valve II"
+    };
+    TunnelMap tm = buildTunnelMapFromInput(input);
+    buildPaths(tm, 30);
+    EXPECT_EQ(0,0);
 }
 
 TEST(Y2022_Day16Example,Test3) {

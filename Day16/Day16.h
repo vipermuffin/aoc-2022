@@ -9,8 +9,12 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 namespace AocDay16 {
 //Function Definitions
-
+    using TunnelMap = std::unordered_map<std::string,std::pair<int32_t,std::vector<std::string>>>;
+    void parseLineForValve(const std::string&,TunnelMap&);
+    TunnelMap buildTunnelMapFromInput(const std::vector<std::string>&);
+    std::vector<std::string> buildPaths(const TunnelMap&,const int32_t numSteps);
 }
