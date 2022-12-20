@@ -25,7 +25,7 @@ TEST(Y2022_SolveDay20, FinalSolutionPartA) {
 }
 
 TEST(Y2022_SolveDay20, FinalSolutionPartB) {
-    EXPECT_EQ("---", solveb());
+    EXPECT_EQ("7973051839072", solveb());
 }
 
 TEST(Y2022_Day20Example,Test1) {
@@ -42,11 +42,15 @@ TEST(Y2022_Day20Example,Test1) {
 }
 
 TEST(Y2022_Day20Example,Test2) {
-    int x = 0;
-    EXPECT_EQ(0,x);
+    vector<int> x{
+        1,
+        2,
+        -3,
+        3,
+        -2,
+        0,
+        4
+    };
+    EXPECT_EQ(1623178306, performMixing(x, 811589153, 10));
 }
 
-TEST(Y2022_Day20Example,Test3) {
-    int x = 0;
-    EXPECT_EQ(0,x);
-}
