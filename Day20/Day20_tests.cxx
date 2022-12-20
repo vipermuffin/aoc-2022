@@ -21,7 +21,7 @@ using namespace std;
 using namespace AocDay20;
 
 TEST(Y2022_SolveDay20, FinalSolutionPartA) {
-    EXPECT_EQ("---", solvea());
+    EXPECT_EQ("4914", solvea());
 }
 
 TEST(Y2022_SolveDay20, FinalSolutionPartB) {
@@ -29,8 +29,16 @@ TEST(Y2022_SolveDay20, FinalSolutionPartB) {
 }
 
 TEST(Y2022_Day20Example,Test1) {
-    int x = 0;
-    EXPECT_EQ(0,x);
+    vector<int> x{
+        1,
+        2,
+        -3,
+        3,
+        -2,
+        0,
+        4
+    };
+    EXPECT_EQ(3,performMixing(x));
 }
 
 TEST(Y2022_Day20Example,Test2) {

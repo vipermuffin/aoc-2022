@@ -12,5 +12,5 @@
 
 namespace AocDay20 {
 //Function Definitions
-
+int64_t performMixing(const std::vector<int>& input);
 }
