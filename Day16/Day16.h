@@ -17,4 +17,5 @@ namespace AocDay16 {
     void parseLineForValve(const std::string&,TunnelMap&);
     TunnelMap buildTunnelMapFromInput(const std::vector<std::string>&);
     std::vector<std::string> buildPaths(const TunnelMap&,const int32_t numSteps);
+    int32_t calculateTotalPressureRelief(const TunnelMap& tm, const std::vector<std::pair<std::string,bool>>& path);
 }

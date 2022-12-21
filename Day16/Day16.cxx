@@ -113,4 +113,29 @@ namespace AocDay16 {
         }
         return paths;
     }
+
+int32_t calculateTotalPressureRelief(const TunnelMap& tm, const std::vector<std::pair<std::string,bool>>& path) {
+    unordered_map<string,bool> valveOn{{"AA",true}};
+    int32_t totalPressure{0};
+    int32_t rate{0};
+    int_fast8_t time{0};
+    auto itr = path.begin();
+    while(time <= 30) {
+        totalPressure += rate;
+        time++;
+        if(itr != path.end()) {
+            const string& valve = itr->first;
+            const bool turnOn = itr->second;
+            
+            if(turnOn) {
+                totalPressure += rate;
+                time++;
+                rate += tm.at(valve).first;
+            }
+            itr++;
+        }
+    }
+    
+    return totalPressure;
+}
 }
