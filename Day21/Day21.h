@@ -12,5 +12,6 @@
 
 namespace AocDay21 {
 //Function Definitions
-
+    int64_t processMonkeyBusiness(const std::vector<std::string>&);
+    int64_t processMonkeyBusiness2(const std::vector<std::string>&);
 }

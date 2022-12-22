@@ -21,21 +21,53 @@ using namespace std;
 using namespace AocDay21;
 
 TEST(Y2022_SolveDay21, FinalSolutionPartA) {
-    EXPECT_EQ("---", solvea());
+    EXPECT_EQ("110181395003396", solvea());
 }
 
 TEST(Y2022_SolveDay21, FinalSolutionPartB) {
-    EXPECT_EQ("---", solveb());
+    EXPECT_EQ("3721298272959", solveb());
 }
 
 TEST(Y2022_Day21Example,Test1) {
-    int x = 0;
-    EXPECT_EQ(0,x);
+    vector<string> input {
+    "root: pppw + sjmn",
+    "dbpl: 5",
+    "cczh: sllz + lgvd",
+    "zczc: 2",
+    "ptdq: humn - dvpt",
+    "dvpt: 3",
+    "lfqf: 4",
+    "humn: 5",
+    "ljgn: 2",
+    "sjmn: drzm * dbpl",
+    "sllz: 4",
+    "pppw: cczh / lfqf",
+    "lgvd: ljgn * ptdq",
+    "drzm: hmdt - zczc",
+    "hmdt: 32"
+    };
+    EXPECT_EQ(152,processMonkeyBusiness(input));
 }
 
 TEST(Y2022_Day21Example,Test2) {
-    int x = 0;
-    EXPECT_EQ(0,x);
+    vector<string> input {
+        "root: pppw + sjmn",
+        "dbpl: 5",
+        "cczh: sllz + lgvd",
+        "zczc: 2",
+        "ptdq: humn - dvpt",
+        "dvpt: 3",
+        "lfqf: 4",
+        "humn: 5",
+        "ljgn: 2",
+        "sjmn: drzm * dbpl",
+        "sllz: 4",
+        "pppw: cczh / lfqf",
+        "lgvd: ljgn * ptdq",
+        "drzm: hmdt - zczc",
+        "hmdt: 32"
+    };
+    EXPECT_EQ(301,processMonkeyBusiness2(input));
 }
 
 TEST(Y2022_Day21Example,Test3) {
