@@ -12,5 +12,7 @@
 
 namespace AocDay25 {
 //Function Definitions
-
+int64_t decodeSnafuNumber(const std::string&);
+std::string encodeSnafuNumber(const int64_t);
+int64_t sumSnafuList(const std::vector<std::string>&);
 }
